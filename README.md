@@ -12,7 +12,7 @@ For more information, check out [cognee documentation](https://docs.cognee.ai/).
 ## Installation
 
 ```bash
-pip install -U langchain-cognee
+pip install -U langchain_cognee
 ```
 
 ## Configuration
@@ -67,7 +67,7 @@ Below is a minimal example of how to use this integration:
         print(doc.page_content)
 ```
 
-You can also incorporate CogneeRetriever in any LangChain chain, such as a RetrievalQA chain or a custom pipeline.
+You can also incorporate CogneeRetriever in any LangChain chain. 
 
 
 

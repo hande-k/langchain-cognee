@@ -20,14 +20,11 @@ from pydantic import ConfigDict, model_validator
 
 
 class CogneeRetriever(BaseRetriever):
-    # TODO: Replace all TODOs in docstring. See example docstring:
-    # https://github.com/langchain-ai/langchain/blob/master/libs/community/langchain_community/retrievers/tavily_search_api.py#L17
     """A LangChain retriever that integrates with cognee, allowing you to:
         1. Add documents to a cognee dataset (via ``add_documents``).
         2. Process (cognify) the dataset into a knowledge graph (via ``process_data``).
         3. Retrieve relevant documents (via the standard Retriever interface).
    
-    # TODO: Replace with relevant packages, env vars, etc.
     Setup:
         Install ``langchain-cognee`` and set environment variable ``LLM_API_KEY`` or pass in the key via the ``llm_api_key`` parameter.
 
@@ -36,7 +33,6 @@ class CogneeRetriever(BaseRetriever):
             pip install -U langchain-cognee
             export LLM_API_KEY="openai-api-key"
 
-    # TODO: Populate with relevant params.
     Key init args:
         - llm_api_key (str): 
             Your LLM API key. If not provided, we attempt to read it from the environment variable ``LLM_API_KEY``.
@@ -49,7 +45,6 @@ class CogneeRetriever(BaseRetriever):
         - k (int):
             Default number of documents to retrieve if not overridden during a query.
 
-    # TODO: Replace with relevant init params.
     Instantiate:
         .. code-block:: python
 
@@ -63,7 +58,6 @@ class CogneeRetriever(BaseRetriever):
             )
 
     Usage:
-
         .. code-block:: python
             # Add documents
             docs = [
@@ -79,8 +73,6 @@ class CogneeRetriever(BaseRetriever):
             results = retriever.invoke("Tell me about Elon Musk")
             for doc in results:
                 print(doc.page_content)
-
-            # TODO: Example output.
 
     Use within a chain:
         .. code-block:: python
@@ -117,8 +109,6 @@ class CogneeRetriever(BaseRetriever):
             print("Answer:", answer)
 
         .. code-block:: none
-
-             # TODO: Example output.
 
     """
 
@@ -193,7 +183,6 @@ class CogneeRetriever(BaseRetriever):
         await cognee.cognify(datasets, user)
 
 
-    # TODO: This method must be implemented to retrieve documents.
     def _get_relevant_documents(
         self, query: str, *, run_manager: CallbackManagerForRetrieverRun, **kwargs: Any
     ) -> List[Document]:
