@@ -12,7 +12,7 @@ For more information, check out [cognee documentation](https://docs.cognee.ai/).
 ## Installation
 
 ```bash
-pip install -U langchain_cognee
+pip install -U langchain-cognee
 ```
 
 ## Configuration
