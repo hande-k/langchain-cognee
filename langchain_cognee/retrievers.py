@@ -13,8 +13,6 @@ from langchain_core.retrievers import BaseRetriever
 
 import os
 import asyncio
-import cognee
-from cognee.api.v1.search import SearchType
 from pydantic import ConfigDict, model_validator
 
 def _import_cognee():
