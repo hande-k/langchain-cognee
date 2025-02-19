@@ -17,18 +17,6 @@ import cognee
 from cognee.api.v1.search import SearchType
 from pydantic import ConfigDict, model_validator
 
-def _import_cognee():
-    """Lazy import Cognee to avoid ImportError if it's not installed."""
-    try:
-        import cognee
-        from cognee.api.v1.search import SearchType
-    except ImportError as e:
-        raise ImportError(
-            "Cognee is not installed. Please install it with:\n"
-            "  pip install cognee\n"
-            "or install langchain-cognee if you want to use CogneeRetriever."
-        ) from e
-    return cognee, SearchType
 
 
 class CogneeRetriever(BaseRetriever):
@@ -142,9 +130,6 @@ class CogneeRetriever(BaseRetriever):
                 raise ValueError("No LLM API key found. Provide via `llm_api_key` or env var `LLM_API_KEY`.")
             self.llm_api_key = env_key
 
-        # Import Cognee
-        cognee, _ = _import_cognee()
-
         # Configure cognee
         cognee.config.set_llm_config(
             {
@@ -166,7 +151,6 @@ class CogneeRetriever(BaseRetriever):
 
     async def _prune_async(self) -> None:
         """Async helper to prune a dataset in cognee."""
-        cognee, _ = _import_cognee()
         await cognee.prune.prune_data()
         await cognee.prune.prune_system(metadata=True)
 
@@ -182,7 +166,6 @@ class CogneeRetriever(BaseRetriever):
 
     async def _add_documents_async(self, texts: List[str]) -> None:
         """Async helper to call cognee add(...)"""
-        cognee, _ = _import_cognee()
         await cognee.add(texts, self.dataset_name)
 
     def process_data(self) -> None:
@@ -192,7 +175,6 @@ class CogneeRetriever(BaseRetriever):
 
     async def _process_data_async(self) -> None:
         """Async helper to 'cognify' a dataset in cognee."""
-        cognee, _ = _import_cognee()
         user = await cognee.modules.users.methods.get_default_user()
         datasets = await cognee.modules.data.methods.get_datasets_by_name(
             self.dataset_name,
@@ -236,8 +218,8 @@ class CogneeRetriever(BaseRetriever):
 
     async def _search_cognee(self, query: str) -> List[str]:
         """Async helper to call cognee search or rag_search."""
-        cognee, SearchType = _import_cognee()
         user = await cognee.modules.users.methods.get_default_user()
+        # Here we pick on of cognee's search types either e.g., INSIGHTS:
         results = await cognee.search(
             query_type=SearchType.INSIGHTS,
             query_text=query,
