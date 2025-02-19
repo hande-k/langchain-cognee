@@ -2327,6 +2327,24 @@ tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<10.0.0"
 typing-extensions = ">=4.7"
 
 [[package]]
+name = "langchain-openai"
+version = "0.3.6"
+description = "An integration package connecting OpenAI and LangChain"
+optional = false
+python-versions = "<4.0,>=3.9"
+groups = ["main"]
+markers = "python_version <= \"3.11\" or python_version >= \"3.12\""
+files = [
+    {file = "langchain_openai-0.3.6-py3-none-any.whl", hash = "sha256:05f0869f6cc963e2ec9e2e54ea1038d9c2af784c67f0e217040dfc918b31649a"},
+    {file = "langchain_openai-0.3.6.tar.gz", hash = "sha256:7daf92e1cd98865ab5213ec5bec2cbd6c28f011e250714978b3a99c7e4fc88ce"},
+]
+
+[package.dependencies]
+langchain-core = ">=0.3.35,<1.0.0"
+openai = ">=1.58.1,<2.0.0"
+tiktoken = ">=0.7,<1"
+
+[[package]]
 name = "langchain-tests"
 version = "0.3.11"
 description = "Standard tests for LangChain implementations"
@@ -5962,4 +5980,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.13"
-content-hash = "7522cbc8eb6b9867e463a92d4bad9afe961d2e38ca4a6b6fd28d5375c9e378ad"
+content-hash = "0e1f57400c7c9329736074ccb14a23d36ca3216054abe2a9d89301c7bc7902cd"
