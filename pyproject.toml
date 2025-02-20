@@ -25,8 +25,6 @@ disallow_untyped_defs = "True"
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
 langchain-core = "^0.3.15"
-cognee = "^0.1.28"
-langchain-openai = "^0.3.6"
 [tool.ruff.lint]
 select = ["E", "F", "I", "T201"]
 

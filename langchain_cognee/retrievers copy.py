@@ -13,7 +13,10 @@ from langchain_core.retrievers import BaseRetriever
 
 import os
 import asyncio
+import cognee
+from cognee.api.v1.search import SearchType
 from pydantic import ConfigDict, model_validator
+
 
 
 class CogneeRetriever(BaseRetriever):
@@ -127,26 +130,7 @@ class CogneeRetriever(BaseRetriever):
                 raise ValueError("No LLM API key found. Provide via `llm_api_key` or env var `LLM_API_KEY`.")
             self.llm_api_key = env_key
 
-        return self
-    
-    
-    def _lazy_init_cognee(self):
-        """Lazy import + config, only once."""
-        # If already set up, just return
-        if hasattr(self, "_cognee") and hasattr(self, "_SearchType"):
-            return self._cognee, self._SearchType
-
-        try:
-            import cognee
-            from cognee.api.v1.search import SearchType
-        except ImportError as e:
-            raise ImportError(
-                "Cognee is not installed. Please install it with:\n"
-                "  pip install cognee\n"
-                "or install langchain-cognee if you want to use CogneeRetriever."
-            ) from e
-
-        # Configure once
+        # Configure cognee
         cognee.config.set_llm_config(
             {
                 "llm_api_key": self.llm_api_key,
@@ -154,10 +138,7 @@ class CogneeRetriever(BaseRetriever):
                 "llm_model": self.llm_model,
             }
         )
-
-        self._cognee = cognee
-        self._SearchType = SearchType
-        return self._cognee, self._SearchType
+        return self
     
     def prune(self) -> None:
         """
@@ -170,7 +151,6 @@ class CogneeRetriever(BaseRetriever):
 
     async def _prune_async(self) -> None:
         """Async helper to prune a dataset in cognee."""
-        cognee, _ = self._lazy_init_cognee()
         await cognee.prune.prune_data()
         await cognee.prune.prune_system(metadata=True)
 
@@ -186,7 +166,6 @@ class CogneeRetriever(BaseRetriever):
 
     async def _add_documents_async(self, texts: List[str]) -> None:
         """Async helper to call cognee add(...)"""
-        cognee, _ = self._lazy_init_cognee()
         await cognee.add(texts, self.dataset_name)
 
     def process_data(self) -> None:
@@ -196,7 +175,6 @@ class CogneeRetriever(BaseRetriever):
 
     async def _process_data_async(self) -> None:
         """Async helper to 'cognify' a dataset in cognee."""
-        cognee, _ = self._lazy_init_cognee()
         user = await cognee.modules.users.methods.get_default_user()
         datasets = await cognee.modules.data.methods.get_datasets_by_name(
             self.dataset_name,
@@ -240,8 +218,8 @@ class CogneeRetriever(BaseRetriever):
 
     async def _search_cognee(self, query: str) -> List[str]:
         """Async helper to call cognee search or rag_search."""
-        cognee, SearchType = self._lazy_init_cognee()
         user = await cognee.modules.users.methods.get_default_user()
+        # Here we pick on of cognee's search types either e.g., INSIGHTS:
         results = await cognee.search(
             query_type=SearchType.INSIGHTS,
             query_text=query,
